@@ -13,6 +13,7 @@ import {
 import Alerts from './examples/Alerts';
 import Scrolling from './examples/Scrolling';
 import Background from './examples/Background';
+import Downloads from './examples/Downloads';
 import Uploads from './examples/Uploads';
 
 const TESTS = {
@@ -38,6 +39,14 @@ const TESTS = {
     description: 'Background color test',
     render() {
       return <Background />;
+    },
+  },
+  Downloads: {
+    title: 'Downloads',
+    testId: 'downloads',
+    description: 'File downloads test',
+    render() {
+      return <Downloads />;
     },
   },
   Uploads: {
@@ -101,6 +110,11 @@ export default class App extends Component<Props, State> {
             title="Background"
             onPress={() => this._changeTest('Background')}
           />
+          {Platform.OS == "ios" && <Button
+            testID="testType_downloads"
+            title="Downloads"
+            onPress={() => this._changeTest('Downloads')}
+          />}
           {Platform.OS === 'android' && <Button
             testID="testType_uploads"
             title="Uploads"

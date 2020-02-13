@@ -104,6 +104,10 @@ export interface WebViewNavigation extends WebViewNativeEvent {
   mainDocumentURL?: string;
 }
 
+export interface FileDownload {
+  downloadUrl: string;
+}
+
 export type DecelerationRateConstant = 'normal' | 'fast';
 
 export interface WebViewMessage extends WebViewNativeEvent {
@@ -131,6 +135,8 @@ export type WebViewProgressEvent = NativeSyntheticEvent<
 >;
 
 export type WebViewNavigationEvent = NativeSyntheticEvent<WebViewNavigation>;
+
+export type FileDownloadEvent = NativeSyntheticEvent<FileDownload>;
 
 export type WebViewMessageEvent = NativeSyntheticEvent<WebViewMessage>;
 
@@ -290,6 +296,7 @@ export interface IOSNativeWebViewProps extends CommonNativeWebViewProps {
   scrollEnabled?: boolean;
   useSharedProcessPool?: boolean;
   onContentProcessDidTerminate?: (event: WebViewTerminatedEvent) => void;
+  onFileDownload?: (event: FileDownloadEvent) => void;
 }
 
 export interface MacOSNativeWebViewProps extends CommonNativeWebViewProps {
@@ -482,6 +489,24 @@ export interface IOSWebViewProps extends WebViewSharedProps {
    * @platform ios
    */
   onContentProcessDidTerminate?: (event: WebViewTerminatedEvent) => void;
+
+  /**
+   * Function that is invoked when the client needs to download a file.
+   *
+   * iOS 13+ only: If the webview navigates to a URL that results in an HTTP
+   * response with a Content-Disposition header 'attachment...', then
+   * this will be called.
+   *
+   * iOS 8+: If the MIME type indicates that the content is not renderable by the
+   * webview, that will also cause this to be called. On iOS versions before 13,
+   * this is the only condition that will cause this function to be called.
+   *
+   * The application will need to provide its own code to actually download
+   * the file.
+   *
+   * If not provided, the default is to let the webview try to render the file.
+   */
+  onFileDownload?: (event: FileDownloadEvent) => void;
 }
 
 export interface MacOSWebViewProps extends WebViewSharedProps {
